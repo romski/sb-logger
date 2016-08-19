@@ -5,7 +5,7 @@ const winston = require('winston'),
   moment = require('moment'),
   util = require('util');
 
-process.setMaxListeners(100);
+  process.setMaxListeners(100);
 
 function getLogger(config) {
   let logger = new winston.Logger({
@@ -30,7 +30,7 @@ function getLogger(config) {
     throw new Error('sb-logger config should be an object');
   }
 
-  function log(type, config) {
+  function log(level, config) {
     return function() { // actual log method
       let message = util.format.apply(undefined, arguments),
         msg = {
@@ -41,18 +41,23 @@ function getLogger(config) {
         };
 
       _.each(config.masks, function (mask) {
-        msg.replace(mask.pattern, mask.mask);
+        msg.message = msg.message.replace(mask.pattern, mask.mask);
       });
 
-      logger.log(type, msg);
+      logger.log(level, msg);
     };
+  }
+
+  function setLogLevel(level){
+    logger.transports.console.level = level;
   }
 
   return {
     debug: log('debug', config),
     info: log('info', config),
     warn: log('warn', config),
-    error: log('error', config)
+    error: log('error', config),
+    setLogLevel: setLogLevel
   };
 }
 
