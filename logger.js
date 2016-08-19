@@ -39,6 +39,11 @@ function getLogger(config) {
           context: config.ctxt,
           message: message ? message.replace(/\n/g, '') : ''
         };
+
+      _.each(config.masks, function (mask) {
+        msg.replace(mask.pattern, mask.mask);
+      });
+
       logger.log(type, msg);
     };
   }

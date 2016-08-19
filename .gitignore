@@ -2,3 +2,4 @@
 /.idea/
 /sb-logger.iml
 /.nvmrc
+/node_modules/
