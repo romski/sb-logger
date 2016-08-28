@@ -9,14 +9,8 @@ const winston = require('winston'),
 
 function getLogger(config) {
   let logger = new winston.Logger({
-    transports: [
-      new winston.transports.Console({
-        json: true,
-        handleExceptions: true,
-        humanReadableUnhandledException: true
-      })
-    ],
     exitOnError: false,
+    transports: config.transports,
     levels: {
       debug: 4,
       info: 3,
@@ -48,8 +42,8 @@ function getLogger(config) {
     };
   }
 
-  function setLogLevel(level){
-    logger.transports.console.level = level;
+  function setLogLevel(transport, level){
+    logger.transports[transport].level = level;
   }
 
   return {
