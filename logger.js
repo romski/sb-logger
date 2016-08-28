@@ -5,27 +5,34 @@ const winston = require('winston'),
   moment = require('moment'),
   util = require('util');
 
-  process.setMaxListeners(100);
+process.setMaxListeners(100);
 
 function getLogger(config) {
-  let logger = new winston.Logger({
-    exitOnError: false,
-    transports: config.transports,
-    levels: {
-      debug: 4,
-      info: 3,
-      warn: 2,
-      error: 1
-    },
-    level: 'warn'
-  });
+  let defaultTransports = [
+      new winston.transports.Console({
+        json: true,
+        handleExceptions: true,
+        humanReadableUnhandledException: true
+      })
+    ],
+    logger = new winston.Logger({
+      exitOnError: false,
+      transports: config.transports || defaultTransports,
+      levels: {
+        debug: 4,
+        info: 3,
+        warn: 2,
+        error: 1
+      },
+      level: 'warn'
+    });
 
   if (!_.isObject(config)) {
     throw new Error('sb-logger config should be an object');
   }
 
   function log(level, config) {
-    return function() { // actual log method
+    return function () { // actual log method
       let message = util.format.apply(undefined, arguments),
         msg = {
           name: config.name,
@@ -42,8 +49,12 @@ function getLogger(config) {
     };
   }
 
-  function setLogLevel(transport, level){
-    logger.transports[transport].level = level;
+  function setLogLevel(level, transport) {
+    if (transport) {
+      logger.transports[transport].level = level;
+    } else {
+      logger.transports.console.level = level;
+    }
   }
 
   return {

@@ -11,7 +11,8 @@ Wrapper for creating [winston](https://github.com/winstonjs/winston) loggers con
     bar: 'baz'
   },
   
-  // transports to use, useful for passing a global transport for sharing amongst all loggers
+  // Optional transports to use, useful for passing a global transport for sharing amongst all loggers.
+  // A default console logger is used if transports are omitted.
   transports: [
     new winston.transports.Console({
       json: true,
@@ -20,7 +21,7 @@ Wrapper for creating [winston](https://github.com/winstonjs/winston) loggers con
     })
   ],
   
-  // each mask is applied in order to the log's message property
+  // Optional masks to apply. Each mask is applied in order to the log's message property
   masks: [ 
     {
       pattern: /(aaa)/gm,
