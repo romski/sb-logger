@@ -1,5 +1,5 @@
 # sb-logger
-Wrapper for creating [winston](https://github.com/winstonjs/winston) loggers configured with a config object. The logger has no transports by default.
+Wrapper for creating [winston](https://github.com/winstonjs/winston) loggers configured with a config object.
 
 ```
 {
