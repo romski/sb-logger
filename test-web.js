@@ -1,12 +1,24 @@
-var express = require('express');
-var app = express();
-var logger = require('./logger');
+const express = require('express');
+const app = express();
+const logger = require('./logger');
+const winston = require('winston');
 
+// global transports for all logger instances
+app.locals.transports = [
+  new winston.transports.Console({
+    json: true,
+    handleExceptions: true,
+    humanReadableUnhandledException: true
+  })
+];
+
+// ad logger per request
 function middleware(req, res, next) {
   req.log = logger.getLogger({
     ctxt: {
       foo: 'bar'
     },
+    transports: req.app.locals.transports,
     masks: [
       {
         pattern: /(aaa)/gm,

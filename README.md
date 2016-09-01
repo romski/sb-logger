@@ -1,8 +1,9 @@
 # sb-logger
-Wrapper for creating [winston](https://github.com/winstonjs/winston) loggers configured with a config object:
+Wrapper for creating [winston](https://github.com/winstonjs/winston) loggers configured with a config object.
 
 ```
 {
+  // unique identifier for this logger
   name: 'foo',
   
   // used as the message context
@@ -10,7 +11,17 @@ Wrapper for creating [winston](https://github.com/winstonjs/winston) loggers con
     bar: 'baz'
   },
   
-  // each mask is applied in order to the log's message property
+  // Optional transports to use, useful for passing a global transport for sharing amongst all loggers.
+  // A default console logger is used if transports are omitted.
+  transports: [
+    new winston.transports.Console({
+      json: true,
+      handleExceptions: true,
+      humanReadableUnhandledException: true
+    })
+  ],
+  
+  // Optional masks to apply. Each mask is applied in order to the log's message property
   masks: [ 
     {
       pattern: /(aaa)/gm,
