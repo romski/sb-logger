@@ -16,7 +16,6 @@ function getLogger(config) {
       })
     ],
     logger = new winston.Logger({
-      exitOnError: false,
       transports: config.transports || defaultTransports,
       levels: {
         debug: 4,
