@@ -1,12 +1,14 @@
+'use strict';
+
 const express = require('express');
 const app = express();
-const logger = require('./logger');
+const logger = require('./../logger');
 const winston = require('winston');
 
 // global transports for all logger instances
 app.locals.transports = [
   new winston.transports.Console({
-    json: true,
+    formatter: require('./../format/sb_rest_1'),
     handleExceptions: true,
     humanReadableUnhandledException: true
   })
@@ -16,7 +18,12 @@ app.locals.transports = [
 function middleware(req, res, next) {
   req.log = logger.getLogger({
     ctxt: {
-      foo: 'bar'
+      CORRELATION_ID: 'correlation-id',
+      SESSION_ID: 'session-id',
+      USER_ID: 'user-id',
+      ACCOUNT_ID: 'account-id',
+      URL: req.url,
+      METHOD: req.method
     },
     transports: req.app.locals.transports,
     masks: [
@@ -37,6 +44,9 @@ app.listen(3000, function () {
 });
 
 app.get('/', function (req, res) {
-  req.log.error('baz aaa aaa bbb');
+  req.log.debug('baz aaa aaa bbb', {foo: "bar", foz: {baz: 2}}, {foo: "bar2"}, {foo: "bar3"});
+  req.log.info('baz aaa aaa bbb', {foo: "bar", foz: {baz: 2}}, {foo: "bar2"}, {foo: "bar3"});
+  req.log.warn('baz aaa aaa bbb', {foo: "bar", foz: {baz: 2}}, {foo: "bar2"}, {foo: "bar3"});
+  req.log.error('baz aaa aaa bbb', {foo: "bar", foz: {baz: 2}}, {foo: "bar2"}, {foo: "bar3"});
   res.send('Hello World!');
 });

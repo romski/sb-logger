@@ -12,10 +12,11 @@ Wrapper for creating [winston](https://github.com/winstonjs/winston) loggers con
   },
   
   // Optional transports to use, useful for passing a global transport for sharing amongst all loggers.
-  // A default console logger is used if transports are omitted.
+  // Use formatter to format the transport logs
+  // A default json console logger is used if transports are omitted.
   transports: [
     new winston.transports.Console({
-      json: true,
+      formatter: require('./format/sb_rest_1'),
       handleExceptions: true,
       humanReadableUnhandledException: true
     })
@@ -34,7 +35,7 @@ Wrapper for creating [winston](https://github.com/winstonjs/winston) loggers con
 
 Supports the same log levels as the window console (`error`, `warn`, `info`, `debug`), with the default set to `warn`.
 
-Logs messages in json using the following format:
+By default, logs messages in json using the following format:
 
 ```
 {
@@ -44,4 +45,4 @@ Logs messages in json using the following format:
   message: <masked message with new lines removed>
 }
 ```
-Context is intended for passing arbitrary data such as header information in an express application.
+Context is for passing arbitrary data such as header information in an express application.
