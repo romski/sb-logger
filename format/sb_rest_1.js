@@ -11,14 +11,14 @@ function format(args){
 
   data.push('SB_REST_1');
   data.push(args.level || '-');
-  data.push(moment().utc().toISOString());
+  data.push(args.meta.timestamp || moment().utc().toISOString());
   data.push(args.meta.context.CORRELATION_ID || '-');
   data.push(args.meta.context.SESSION_ID || '-');
   data.push(args.meta.context.USER_ID || '-');
   data.push(args.meta.context.ACCOUNT_ID || '-');
   data.push(args.meta.context.URL || '-');
   data.push(args.meta.context.METHOD || '-');
-  data.push(args.meta.name || '-');
+  data.push(args.meta.name && args.meta.name.replace(/ /g, '-') || '-');
   data.push(args.meta.message.replace(/\n/g, ''));
 
   return data.join(' ');
