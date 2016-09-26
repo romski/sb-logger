@@ -23,7 +23,7 @@ function getLogger(config) {
         warn: 2,
         error: 1
       },
-      level: 'warn'
+      level: 'info'
     });
 
   if (!_.isObject(config)) {
