@@ -2,13 +2,13 @@
 
 const express = require('express');
 const app = express();
-const logger = require('./logger');
+const logger = require('./../logger');
 const winston = require('winston');
 
 // global transports for all logger instances
 app.locals.transports = [
   new winston.transports.Console({
-    formatter: require('./format/sb_rest_1'),
+    formatter: require('./../format/sb_rest_1'),
     handleExceptions: true,
     humanReadableUnhandledException: true
   })

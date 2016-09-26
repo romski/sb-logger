@@ -1,4 +1,4 @@
-var logFactory = require('./logger');
+var logFactory = require('./../logger');
 var log = logFactory.getLogger({
   ctxt: { foo: 'bar' }
 });
