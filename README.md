@@ -1,48 +1,81 @@
 # sb-logger
-Wrapper for creating [winston](https://github.com/winstonjs/winston) loggers configured with a config object.
+Wrapper for creating [winston](https://github.com/winstonjs/winston) loggers.
+
+The loggers created build on Winston by providing defaults that can be overridden, as well as new functionality such as the ability to mask messages.
+
+Supports the same log levels as the window console (`error`, `warn`, `info`, `debug`), with the default set to `info`.
+
+## Creating loggers 
+```
+var logger = require('sb-logger');
+var log;
+
+// default un-named logger: uses console as default transport with 'sb_rest_1' as the format
+log = logger.getLogger();
+
+// default un-named logger: uses console as default transport with 'sb_rest_2' as the format
+log = logger.getLogger('sb_rest_2');
+
+// default logger named 'wibble': uses console as default transport with 'sb_rest_1' as the format
+log = logger.getLogger('sb_rest_1', 'wibble');
+
+// logger configured using config object
+log = logger.getLogger(config);
+```
+ 
+## Transports
+Transports default to a console transport with the specified formatter, or the default if no formatter is specified. The transports can be overridden by using the `config.transports` property of a config object
+
+```
+logger.getLogger({
+  transports: [...]
+});
+```
+
+## Formats
+The loggers support named logging formatters. The formatter is specified at creation time and defaults to 'sb_rest_1' if not specified. 
+
+The formater can be specified as the first string argument to `getLogger()` or as the `config.format` property of a config object, or set directly on any transport supplied in the config object `config.transports`. 
+
+The logger can be used to access the formatters by name, `logger.getFormatter(name)`, returning returning the default if the format is not known.
+
+The logger creates a log object as follows:
+```
+{
+  name: '...',
+  timestamp: '...',
+  context: {..}, // config.ctxt
+  message: '...'
+}
+```
+
+Formatters get passed an args object which has a `meta` property representing the log object;
+
+## Masks
+Masks apply a pattern to the message and replace any matches with a mask to hide sensitive data.
+
+Masks are applied in the order specified
+
+By default there is a mask to hide jwt tokens.
+
+Custom masks can be specified usign the config object:
 
 ```
 {
-  // unique identifier for this logger
-  name: 'foo',
-  
-  // used as the message context
-  ctxt: { 
-    bar: 'baz'
-  },
-  
-  // Optional transports to use, useful for passing a global transport for sharing amongst all loggers.
-  // Use formatter to format the transport logs
-  // A default json console logger is used if transports are omitted.
-  transports: [
-    new winston.transports.Console({
-      formatter: require('./format/sb_rest_1'),
-      handleExceptions: true,
-      humanReadableUnhandledException: true
-    })
-  ],
-  
-  // Optional masks to apply. Each mask is applied in order to the log's message property
-  masks: [ 
-    {
-      pattern: /(aaa)/gm,
-      mask: '****'
-    }
+  masks: [
+    { pattern: /foo/, mask: 'bar' }
   ]
-  
 }
 ```
 
-Supports the same log levels as the window console (`error`, `warn`, `info`, `debug`), with the default set to `warn`.
-
-By default, logs messages in json using the following format:
+## Config Object
 
 ```
 {
-  name: <config name>,
-  timestamp: <utc iso string>,
-  context: <config ctxt object>,
-  message: <masked message with new lines removed>
+  name,
+  format,
+  transports,
+  masks,
+  ctxt
 }
 ```
-Context is for passing arbitrary data such as header information in an express application.

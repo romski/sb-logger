@@ -1,6 +1,6 @@
 {
   "name": "sb-logger",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Factory for winston loggers",
   "main": "logger.js",
   "keywords": [
@@ -23,6 +23,7 @@
     "winston": "^2.2.0"
   },
   "devDependencies": {
+    "express": "^4.14.0",
     "jasmine": "^2.5.2"
   }
 }
