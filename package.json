@@ -23,6 +23,7 @@
     "winston": "^2.2.0"
   },
   "devDependencies": {
+    "express": "^4.14.0",
     "jasmine": "^2.5.2"
   }
 }
