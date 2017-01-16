@@ -16,6 +16,9 @@
     "type": "git",
     "url": "https://github.com/romski/sb-logger.git"
   },
+  "publishConfig" : {
+    "registry": "https://registry.npmjs.org"
+  },
   "dependencies": {
     "lodash": "^3.10.1",
     "moment": "^2.11.1",
