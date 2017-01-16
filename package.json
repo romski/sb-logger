@@ -1,6 +1,6 @@
 {
   "name": "sb-logger",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Factory for winston loggers",
   "main": "logger.js",
   "keywords": [
@@ -16,7 +16,7 @@
     "type": "git",
     "url": "https://github.com/romski/sb-logger.git"
   },
-  "publishConfig" : {
+  "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
