@@ -10,7 +10,8 @@ const winston = require('winston'),
   ],
   formatters = {
     'sb_rest_1': require('./format/sb_rest_1'),
-    'sb_rest_2': require('./format/sb_rest_2')
+    'sb_rest_2': require('./format/sb_rest_2'),
+    'sb_web_1': require('./format/sb_web_1')
   },
   defaultFormatter = formatters['sb_rest_1'],
   defaultTransports = [];
