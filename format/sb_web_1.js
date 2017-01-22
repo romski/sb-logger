@@ -11,6 +11,7 @@ function format(args){
 
   data.push(args.meta.timestamp || moment().utc().toISOString());
   data.push(args.level || '-');
+  data.push(args.meta.name || '');
   data.push(args.meta.message.replace(/\n/g, ''));
 
   return data.join(' ');
