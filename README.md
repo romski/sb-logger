@@ -56,7 +56,7 @@ Masks apply a pattern to the message and replace any matches with a mask to hide
 
 Masks always include a mask for jwt tokens and is applied first.
 ```
-{ pattern: /(Bearer [a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?)/gm, mask: '****' }
+{ pattern: /([a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?)/gm, mask: '****' }
 ```
 
 Custom masks can be specified using the config object:
