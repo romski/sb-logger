@@ -4,10 +4,7 @@ const winston = require('winston'),
   _ = require('lodash'),
   moment = require('moment'),
   util = require('util'),
-  jwtMask = {pattern: /(Bearer [a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?)/gm, mask: '****'},
-  masks = [
-    jwtMask
-  ],
+  jwtMask = { pattern: /(Bearer [a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?)/gm, mask: '****' },
   formatters = {
     'sb_rest_1': require('./format/sb_rest_1'),
     'sb_rest_2': require('./format/sb_rest_2'),
@@ -16,6 +13,8 @@ const winston = require('winston'),
   defaultFormatter = formatters['sb_rest_1'],
   defaultTransports = [];
 
+let masks = [ jwtMask ];
+
 /**
  * Factory for loggers
  * @param config - formatter id, or config object
@@ -23,11 +22,12 @@ const winston = require('winston'),
  * @returns {{debug: *, info: *, warn: *, error: *, setLogLevel: setLogLevel}}
  */
 function getLogger(config, name) {
-  let logger;
-
   config = config || {};
+  masks = masks.concat(config.masks || []);
 
-  logger = new winston.Logger({
+  const chunkPattern = new RegExp('.{1,' + (config.maxChars || 1000) + '}', 'g');
+
+  const logger = new winston.Logger({
     transports: config.transports || getDefaultTransports(config.format || config),
     levels: {
       debug: 4,
@@ -40,24 +40,37 @@ function getLogger(config, name) {
 
   function log(level, config) {
     return function () { // actual log method
-      let message = util.format.apply(undefined, arguments),
-        msg = {
-          name: config.name || name,
-          timestamp: moment().utc().toISOString(),
-          context: config.ctxt,
-          message: message ? message.replace(/\n/g, '') : ''
-        };
+      const parts = split(util.format.apply(undefined, arguments));
+      const entry = {
+        name: config.name || name,
+        timestamp: moment().utc().toISOString(),
+        context: config.ctxt
+      };
 
-      _.each(config.masks || masks, function (mask) {
-        msg.message = msg.message.replace(mask.pattern, mask.mask);
+      _.each(parts, (part) => {
+        entry.message = mask(part);
+        logger.log(level, entry);
       });
-
-      logger.log(level, msg);
     };
   }
 
   function setLogLevel(level, transport) {
     logger.transports[transport || 'console'].level = level;
+  }
+
+  function split(message) {
+    const chunks = [];
+    _.each(_.words(message, chunkPattern), chunk => {
+      chunks.push(chunk);
+    });
+    return chunks;
+  }
+
+  function mask(text) {
+    _.each(config.masks || masks, (mask) => {
+      text = text.replace(mask.pattern, mask.mask);
+    });
+    return text;
   }
 
   return {
@@ -70,7 +83,7 @@ function getLogger(config, name) {
 }
 
 function getDefaultTransports(format) {
-  defaultTransports[0] = new winston.transports.Console({formatter: getFormatter(format)});
+  defaultTransports[0] = new winston.transports.Console({ formatter: getFormatter(format) });
   return defaultTransports;
 }
 

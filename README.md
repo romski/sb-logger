@@ -52,19 +52,29 @@ The logger creates a log object as follows:
 Formatters get passed an args object which has a `meta` property representing the log object;
 
 ## Masks
-Masks apply a pattern to the message and replace any matches with a mask to hide sensitive data.
+Masks apply a pattern to the message and replace any matches with a mask to hide sensitive data. Masks are applied in the order specified.
 
-Masks are applied in the order specified
+Masks always include a mask for jwt tokens and is applied first.
+```
+{ pattern: /(Bearer [a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?)/gm, mask: '****' }
+```
 
-By default there is a mask to hide jwt tokens.
-
-Custom masks can be specified usign the config object:
+Custom masks can be specified using the config object:
 
 ```
 {
   masks: [
     { pattern: /foo/, mask: 'bar' }
   ]
+}
+```
+
+## Message size
+By default, the message is split into 1000 character chunks and each chunk logged separately. Each chunk is logged with the same timestamp. The maximum number of characters can be specified on the config object.
+
+```
+{
+  maxChars: 500 // default 1000
 }
 ```
 
@@ -76,6 +86,7 @@ Custom masks can be specified usign the config object:
   format,
   transports,
   masks,
-  ctxt
+  ctxt,
+  maxChars
 }
 ```
