@@ -4,7 +4,7 @@ const winston = require('winston'),
   _ = require('lodash'),
   moment = require('moment'),
   util = require('util'),
-  jwtMask = { pattern: /(Bearer [a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?)/gm, mask: '****' },
+  jwtMask = { pattern: /([a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?)/gm, mask: '****' },
   formatters = {
     'sb_rest_1': require('./format/sb_rest_1'),
     'sb_rest_2': require('./format/sb_rest_2'),
@@ -67,7 +67,7 @@ function getLogger(config, name) {
   }
 
   function mask(text) {
-    _.each(config.masks || masks, (mask) => {
+    _.each(masks, (mask) => {
       text = text.replace(mask.pattern, mask.mask);
     });
     return text;
