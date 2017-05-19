@@ -25,7 +25,7 @@ function getLogger(config, name) {
   config = config || {};
   masks = masks.concat(config.masks || []);
 
-  const chunkPattern = new RegExp('.{1,' + (config.maxChars || 1000) + '}', 'g');
+  const chunkPattern = new RegExp('.{1,' + (config.splitChars || 1000) + '}', 'g');
 
   const logger = new winston.Logger({
     transports: config.transports || getDefaultTransports(config.format || config),

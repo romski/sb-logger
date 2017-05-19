@@ -1,4 +1,4 @@
-log = require('./logger').getLogger({ format: 'sb_web_1', maxChars: 5 }, 'log1');
+log = require('./logger').getLogger({ format: 'sb_web_1', splitChars: 5 }, 'log1');
 log.info('Logging! Logging! Logging! Logging!');
 
 log = require('./logger').getLogger({ format: 'sb_web_1' }, 'log2');

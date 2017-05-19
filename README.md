@@ -74,7 +74,7 @@ By default, the message is split into 1000 character chunks and each chunk logge
 
 ```
 {
-  maxChars: 500 // default 1000
+  splitChars: 500 // default 1000
 }
 ```
 
@@ -87,6 +87,6 @@ By default, the message is split into 1000 character chunks and each chunk logge
   transports,
   masks,
   ctxt,
-  maxChars
+  splitChars
 }
 ```
