@@ -1,6 +1,6 @@
 {
   "name": "sb-logger",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Factory for winston loggers",
   "main": "logger.js",
   "keywords": [
