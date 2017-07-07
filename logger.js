@@ -50,7 +50,7 @@ function getLogger(config, name) {
       let count = 1;
 
       _.each(parts, (part) => {
-        entry.message = `[${count++}/${parts.length}] ${mask(part)}`;
+        entry.message = parts.length > 1 ? `[${count++}/${parts.length}] ${mask(part)}` : mask(part);
         logger.log(level, entry);
       });
     };
